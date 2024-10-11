@@ -21,6 +21,7 @@ public class AccessLogFilterConfigProperties {
     private Integer responseBodyMaxSize;
 
     private String dateTimeFormat;
+    private String autoGenerateRequestId;
 
     public String[] getIgnoreUrls() {
         return ignoreUrls;
@@ -74,5 +75,16 @@ public class AccessLogFilterConfigProperties {
 
     public void setDateTimeFormat(String dateTimeFormat) {
         this.dateTimeFormat = dateTimeFormat;
+    }
+
+    public String getAutoGenerateRequestId() {
+        if (ObjectUtils.isEmpty(enabled)) {
+            return DEFAULT_ENABLED;
+        }
+        return autoGenerateRequestId;
+    }
+
+    public void setAutoGenerateRequestId(String autoGenerateRequestId) {
+        this.autoGenerateRequestId = autoGenerateRequestId;
     }
 }

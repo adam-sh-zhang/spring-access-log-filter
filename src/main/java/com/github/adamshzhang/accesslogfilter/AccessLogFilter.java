@@ -2,6 +2,7 @@ package com.github.adamshzhang.accesslogfilter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.MDC;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -14,10 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Core request filter to generate access log
@@ -47,6 +45,12 @@ public class AccessLogFilter extends OncePerRequestFilter {
         // if enabled not equal "true"
         if (!ObjectUtils.nullSafeEquals("true", accessLogFilterConfigProperties.getEnabled())) {
             needApplyFilter = false;
+        } else {
+            if (ObjectUtils.nullSafeEquals("true", accessLogFilterConfigProperties.getAutoGenerateRequestId())) {
+                String requestId = UUID.randomUUID().toString();
+                MDC.put("request-id", requestId);
+                request.setAttribute("request-id", requestId);
+            }
         }
 
         // if url is ignored by the setting "ignore-urls"
